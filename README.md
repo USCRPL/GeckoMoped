@@ -43,7 +43,7 @@ vector axes are x, y
 
 ; set the diagonal/pythagorean velocity for the vector move.
 ; yes it says X velocity, but that is a lie.
-; also note: some careful testing has revealed that the units of 
+; also note: testing has revealed that the units of 
 ; this velocity are roughly (1/3.8) steps per second
 x velocity 100
 
@@ -70,16 +70,16 @@ The random disconnections turn out to be because the developers of the GUI made 
 
 The QLong issue is due to a similar oversight.  A QLong is a query sent to the motor controllers that causes them to respond with their current position and velocity, and where in the program they are.  As you can imagine, the GUI needs this information to drive the debugger view and the position readouts.  Unfortunately, it seems like no one ever wrote code in the GUI to send QLongs, so it waits forever for data that never shows up, and appears to hang on the first line of the program.  I can only imagine that the developers left the debug QLong checkbox on while they were testing, or just expected users to figure this out.
 
-For some reason, these issues have never gotten fixed.  We emailed GeckoDrive about them, and their response was that these motor controllers were not designed for continuous operation in "debug" mode, where they're connected to a computer.  Instead, you're supposed to download code once, then physically switch them into "run" mode and run them untethered.  That wasn't going to work for our application, where we're driving an industrial CNC from complex and changing calculations to construct a rocket fuselage.  So we decided to fix it ourselves.  First, we wrote a Python class, `GeckoMotionDriver`, which runs the idle function in a background thread every 20ms, and periodically sends QLongs to update its state data.  That worked great, so we also ported the threading code back to the GUI instead of that idle-function based nonsense.
+For some reason, these issues have never gotten fixed.  We emailed GeckoDrive about them, and their response was that these motor controllers were not designed for continuous operation in "debug" mode, where they're connected to a computer.  Instead, you're supposed to download code once, then physically switch them into "run" mode and run them untethered.  That wasn't going to work for our application, where we're driving an industrial CNC from complex and changing calculations to construct a rocket fuselage.  So we decided to fix it ourselves.  First, we wrote a Python class, `GeckoDriver`, which acts as an API and runs the idle function in a background thread every 20ms.  It also periodically sends QLongs to update its state data.  That worked great, so we also ported the threading code back to the GUI instead of that idle-function based nonsense.
 
-Today, we use this driver in our day-to-day operations, and have had an order of magnitude less issues with the system. GeckoMotion might claim that GM215s are "not generally recommended for end-user CNC applications", but that is entirely a software issue: by using this driver, we have no problems driving these capable and powerful controllers directly from a computer program.
+Today, we use this driver in our day-to-day operations, and have had an order of magnitude less issues with the system. GeckoDrive might claim that GM215s are "not generally recommended for end-user CNC applications", but that is entirely a software issue: by using this driver, we have no problems driving these capable and powerful controllers directly from a computer program.
 
 
 #### License
 
 As far as I can tell, GeckoDrive did not include any sort of license with GeckoMotion.  Accordingly, I am releasing this library as public domain.
 
-That said, it is still 80% their code, and they deserve all the credit for writing it and getting it this far.  I just added some polish on top of it.
+That said, it is still 90% their code, and they deserve all the credit for writing it and getting it this far.  I just added some polish on top of it.
 
 #### Dependencies
 

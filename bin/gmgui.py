@@ -22,8 +22,8 @@ import copy, pickle, os, os.path, sys, re, time
 from threading import Thread, Lock
 #from multiprocessing import Process
 #import subprocess
-from geckomotion import _gladedir, _app_fullname, _version, _imagedir, _icondir, __path__
-from geckomotion.devices import Devices, RS485Devices
+from geckomoped import _gladedir, _app_fullname, _version, _imagedir, _icondir, __path__
+from geckomoped.devices import Devices, RS485Devices
 
 def _fulldir(d):
 	return os.path.join(__path__[0], d)

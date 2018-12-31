@@ -1,0 +1,8 @@
+
+# documentation
+include README.md
+recursive-include examples *
+
+# resources
+include geckomoped/gm.glade
+recursive-include geckomoped/images *
