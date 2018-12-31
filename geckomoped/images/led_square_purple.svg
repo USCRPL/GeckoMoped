@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://web.resource.org/cc/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg" id="svg9493" sodipodi:version="0.32" viewBox="0 0 50 50" sodipodi:docname="led_square_purple.svg" sodipodi:docbase="/datas/Projs/Cliparts Stocker/led">
+  <defs id="defs9495">
+    <linearGradient id="linearGradient31689" y2="46.774" gradientUnits="userSpaceOnUse" y1="47.917" gradientTransform="matrix(.38844 0 0 .61810 5.2069 2.6263)" x2="21.594" x1="21.594">
+      <stop id="stop6508" stop-color="#fff" stop-opacity="0" offset="0"/>
+      <stop id="stop6510" stop-color="#fff" stop-opacity=".87451" offset="1"/>
+    </linearGradient>
+    <linearGradient id="linearGradient31706" y2="44.594" gradientUnits="userSpaceOnUse" y1="43.4" x2="18.391" x1="18.391">
+      <stop id="stop7538" stop-color="#870083" offset="0"/>
+      <stop id="stop7540" stop-color="#fe9aff" offset="1"/>
+    </linearGradient>
+    <linearGradient id="linearGradient31606" y2="44.656" gradientUnits="userSpaceOnUse" y1="43.338" x2="19.031" x1="17.728">
+      <stop id="stop5758" stop-color="#828282" offset="0"/>
+      <stop id="stop5760" stop-color="#929292" stop-opacity=".35294" offset="1"/>
+    </linearGradient>
+    <linearGradient id="linearGradient31694" y2="41.6" gradientUnits="userSpaceOnUse" y1="39.991" gradientTransform="matrix(.5 0 0 1 -1.2 -8.8)" x2="29.6" x1="29.6">
+      <stop id="stop5744" stop-color="#adadad" offset="0"/>
+      <stop id="stop5746" stop-color="#f0f0f0" offset="1"/>
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview id="base" bordercolor="#666666" borderopacity="1.0" pagecolor="#ffffff"/>
+  <g id="layer1">
+    <g id="g31724" transform="matrix(31.25 0 0 31.25 -400 -975)">
+      <path id="path31596" fill="url(#linearGradient31694)" d="m12.8 31.2h1.6v1.6h-1.6v-1.6z"/>
+      <path id="path31598" d="m17.75 43.344v1.312h1.281v-1.312h-1.281z" transform="translate(-4.7906 -12)" sodipodi:type="inkscape:offset" fill="url(#linearGradient31606)"/>
+      <path id="path31600" d="m17.812 43.406v1.188h1.157v-1.188h-1.157z" transform="translate(-4.7906 -12)" sodipodi:type="inkscape:offset" fill="url(#linearGradient31706)"/>
+      <path id="path31602" d="m13.291 31.445c-0.261 0.001-0.23-0.052-0.23 0.348 0 0.195 0.108 0.367 0.23 0.367h0.619c0.123 0 0.219-0.165 0.219-0.367 0-0.403 0.026-0.351-0.219-0.348h-0.619z" sodipodi:nodetypes="csccscc" fill="url(#linearGradient31689)"/>
+    </g>
+  </g>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+        <cc:license rdf:resource="http://creativecommons.org/licenses/publicdomain/"/>
+        <dc:publisher>
+          <cc:Agent rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>led square purpe</dc:title>
+        <dc:date>2010-03-09T13:33:03</dc:date>
+        <dc:description>Glossy button by Jena-Victor Balin. From OCAL 0.18 release.</dc:description>
+        <dc:source>http://openclipart.org/detail/30457/led-square-purpe-by-anonymous</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Anonymous</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>button</rdf:li>
+            <rdf:li>clip art</rdf:li>
+            <rdf:li>clipart</rdf:li>
+            <rdf:li>glossy</rdf:li>
+            <rdf:li>purple</rdf:li>
+            <rdf:li>square</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"/>
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>
