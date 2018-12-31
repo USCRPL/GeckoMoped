@@ -4,9 +4,11 @@ import os
 # Copyright (c) 2014 Geckodrive Inc.
 # NOTE: machine-generated file.  Do not edit.
 
-_gladedir = os.path.dirname(os.path.realpath(__file__))
-_imagedir = "images"
-_icondir = "images"
+thisdir = os.path.dirname(os.path.realpath(__file__))
+
+_gladedir = thisdir
+_imagedir = os.path.join(thisdir, "images")
+_icondir = os.path.join(thisdir, "images")
 _version = "1.0.31"
 _app_fullname = "geckomotion-" + _version
  
