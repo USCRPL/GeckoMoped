@@ -1,5 +1,5 @@
-from geckomotion.devices import RS485Devices
-from mockui import MockUI, MockTab, PersistentProject, Persistent
+from .devices import RS485Devices
+from .mockui import MockUI, MockTab, PersistentProject, Persistent
 from threading import Thread, Lock
 import time
 import traceback
@@ -9,7 +9,7 @@ class GMCompileException(Exception): pass
 # thrown when state-controlling functions are called at invalid times
 class GMInvalidStateException(Exception): pass
 
-class GeckoMotionDriver(object):
+class GeckoDriver(object):
 	
 	# log_file is the file to send the driver's debug output to.  If it is None, no output will be printed.
 	# serial_update_callback should be a no-argument function, and is called immediately after the serial tick function.
@@ -45,7 +45,7 @@ class GeckoMotionDriver(object):
 		
 	def get_serialports(self):
 		""" Returns a list of serial port names that exist on the system.  
-		Pass one of these to serial_connect()."""
+		Pass one of these toconnect()."""
 		
 		return (port[0] for port in self.devices.get_serport_list())
 	
