@@ -77,9 +77,7 @@ Today, we use this driver in our day-to-day operations, and have had an order of
 
 #### License
 
-As far as I can tell, GeckoDrive did not include any sort of license with GeckoMotion.  Accordingly, I am releasing this library as public domain.
-
-That said, it is still 90% their code, and they deserve all the credit for writing it and getting it this far.  I just added some polish on top of it.
+This library is still owned by GeckoDrive and subject to their freeware release terms.  I just added some polish on top of it.
 
 #### Dependencies
 

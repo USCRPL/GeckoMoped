@@ -56,11 +56,7 @@ class TabLabel(Gtk.Box):
 		button.add(Gtk.Image.new_from_stock(Gtk.STOCK_CLOSE, Gtk.IconSize.MENU))
 		button.connect("clicked", self.button_clicked)
 		data =  ".button {\n" \
-				"-GtkButton-default-border : 0px;\n" \
-				"-GtkButton-default-outside-border : 0px;\n" \
-				"-GtkButton-inner-border: 0px;\n" \
-				"-GtkWidget-focus-line-width : 0px;\n" \
-				"-GtkWidget-focus-padding : 0px;\n" \
+				"border: none;\n" \
 				"padding: 0px;\n" \
 				"}"
 		provider = Gtk.CssProvider()
@@ -696,7 +692,7 @@ class TabManager(object):
 
 	def add_filters(self, dialog):
 		filter_gm = Gtk.FileFilter()
-		filter_gm.set_name("GeckoMotion files")
+		filter_gm.set_name("GeckoMoped files")
 		filter_gm.add_pattern("*.gm")
 		dialog.add_filter(filter_gm)
 
@@ -808,7 +804,7 @@ class UI:
 		self.serial_control_lock = Lock()
 		
 		self.about.set_version(_version)
-		self.about.set_title("About GeckoMotion version "+_version)
+		self.about.set_title("About GeckoMoped version "+_version)
 		
 		self.pb_chooser = builder.get_object("filechooserwidget1")
 		self.cproj = builder.get_object("settings_current_project")
@@ -1176,7 +1172,7 @@ class UI:
 		filename = self.tab_mgr.get_filename()
 		if filename is None:
 			filename = "<untitled>"
-		self.mainwindow.set_title(filename + " - GeckoMotion")
+		self.mainwindow.set_title(filename + " - GeckoMoped")
 	
 
 	def win_del(self, *args):
@@ -1306,7 +1302,7 @@ class UI:
 			self.set_serport(self.pp.devname, self.pp.devtext)
 		except KeyError:
 			pass
-		self.mainwindow.set_title("%s - GeckoMotion" % (os.path.basename(folder),) if folder else "GeckoMotion")
+		self.mainwindow.set_title("%s - GeckoMoped" % (os.path.basename(folder),) if folder else "GeckoMoped")
 		return True
 	
 	def populate_cproj(self):
@@ -2420,5 +2416,5 @@ class PersistentProject(Persistent):
 if __name__ == "__main__":
 	
 	# Create user interface
-	ui = UI(Persistent(), Devices())
+	ui = UI()
 	ui.run()
