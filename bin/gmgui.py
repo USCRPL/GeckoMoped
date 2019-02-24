@@ -993,6 +993,22 @@ class UI:
 		self.geckomotion_serial_thread.start()
 
 
+	# background function which reads data from the devices and displays it in the GUI.
+	def update_device_data(self):
+		self.serial_control_lock.acquire()
+
+		gui_data = self.devs.gui_data
+
+		# when the devices want to update the UI, they store lambdas in actions()
+		# now that we are in the UI thread, we can execute them here
+		for action in gui_data.actions:
+			action(self)
+
+		gui_data.actions = []
+
+		self.serial_control_lock.release()
+
+		self.update()
 
 	def internal_serial_thread(self):
 		""" Internal function which ticks the motor controller comms code.  Updates status, and sends the next command if applicable."""
@@ -1797,6 +1813,8 @@ class UI:
 			# Target device changed
 			self.set_device(new)
 		self.set_verbose(self.get_verbose())
+
+		self.devs.set_trace(self.get_verbose())
 			
 	def set_device(self, index, connect=True):
 		self.serial_control_lock.acquire()
@@ -2416,5 +2434,10 @@ class PersistentProject(Persistent):
 if __name__ == "__main__":
 	
 	# Create user interface
-	ui = UI()
+	if len(sys.argv) > 1 and sys.argv[1] == '--simulate':
+		# use fake devices
+		ui = UI(Persistent(), Devices())
+	else:
+		ui = UI()
+	
 	ui.run()

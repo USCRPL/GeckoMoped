@@ -44,6 +44,11 @@ def win32_full_port_name(portname):
         return portname
     return '\\\\.\\' + portname
 
+class GUIData():
+    def __init__(self):
+        self.actions = []
+
+
 
 class Device(object):
     """Base class for single target device on serial bus.
@@ -75,6 +80,7 @@ class Device(object):
         self.reset_offset()
         self.pos_valid = True   # Whether position is meaningful
         self.vel_valid = True   # Whether velocity is meaningful
+
     def is_busy(self):
         return (self.flags & Device.FLG_BUSY) != 0
     def error_state(self):
@@ -143,7 +149,6 @@ class Devices(object):
     STEP_CURSOR = 5
 
     def __init__(self):
-        self.ui = None
         self.devname = None     # Serial port device name
         self._state = Devices.READY   # dummy devices start 'ready'
         self.stepping = Devices.STOPPED
@@ -157,8 +162,15 @@ class Devices(object):
         self.insim_state = 0
         self.insn_len = 1
         self.send_next_command = False
+        
+        # Stores the data from the device that will be passed to the GUI
+        self.gui_data=GUIData()
+
+        self.trace = False;
+
     def set_ui(self, ui):
         self.ui = ui
+
     def target_name(self):
         return "GM215 Simulator"
     def get_serport_list(self):
@@ -169,6 +181,12 @@ class Devices(object):
         return GLib.timeout_add(ms, cb, data)
     def remove_timeout(self, tag):
         Glib.source_remove(tag)
+
+    def set_trace(self, enable_trace):
+        """ Set whether to enable trace logging"""
+        self.trace = enable_trace;
+
+
     def timeout(self, data):
         #print "TMO", data
         # True to continue, False to stop timer.
@@ -205,8 +223,8 @@ class Devices(object):
         self.code.mod_asm = yes
 
     def update_status_button(self):
-        if self.ui is not None:
-            self.ui.update_status_button("%d [%s]" % (self.n_devs, Devices.states_short[self.state]))
+
+        self.gui_data.actions.append(lambda gui: gui.update_status_button("%d [%s]" % (self.n_devs, Devices.states_short[self.state])))
 
     @property
     def n_devs(self): return self._n_devs
@@ -253,7 +271,7 @@ class Devices(object):
         has already set self.addr (next address) based on feedback from the
         devices.  Assumed to be in RUNNING or PAUSED state for this to be called.
         """
-        self.update_exec_pointer()
+        self.gui_data.actions.append(lambda gui: self.update_exec_pointer())
         if self.state == Devices.PAUSED:
             # This would not normally happen, however there is a possibility
             # the pause command was not actually received by the device before
@@ -273,7 +291,6 @@ class Devices(object):
             #    return  # remain in RUNNING state  <-- idle processing.
         self.stepping = Devices.STOPPED
         self.state = Devices.READY
-        self.ui.update()
 
     def _write_insn(self, binlist, fast, instant, nxtaddr):
         """binlist is list of 1-4 32-bit words, which is the next instruction
@@ -558,7 +575,7 @@ class RS485Devices(Devices):
                 GObject.source_remove(tag)
 
     def log_resp(self, x, typ):
-        if self.ui.get_trace():
+        if self.trace:
             print(typ, "recv", len(x), ":", ' '.join(["%02X" % c for c in x]))
 
     def x_qs_resp(self, x):
@@ -568,7 +585,7 @@ class RS485Devices(Devices):
             self.devs[0].flags = flgs
             self.devs[0].pc = pc
             self.addr = pc  # Set "overall" address (always have X axis!)
-            self.ui.update_status(0, self.devs[0])
+            self.gui_data.actions.append(lambda gui: gui.update_status(0, self.devs[0]))
         except AttributeError:
             print("Axis 0 discovered by short query")
             self._send_qlong(True)
@@ -581,7 +598,8 @@ class RS485Devices(Devices):
             dev = self.devs[axisnum]
             dev.flags = flgs
             dev.pc = self.devs[0].pc    # Assume others at same PC (avoid off-by-1 errors)
-            self.ui.update_status(axisnum, dev)
+            self.gui_data.actions.append(lambda gui: gui.update_status(axisnum, dev))
+
         except AttributeError:
             print("Axis", flgs & Device.MASK_AXISNUM, "discovered by short query")
             self._send_qlong(True)
@@ -648,10 +666,10 @@ class RS485Devices(Devices):
         self._handle_qlong(x)
         for n in range(4):
             if self.devs[n] is None:
-                self.ui.update_status(n, None)
+                self.gui_data.actions.append(lambda gui: gui.update_status(n, None))
         if not self.n_devs:
             # Lost contact with all devices.
-            self.ui.device_notify("No response from any device.")
+            self.gui_data.actions.append(lambda gui: gui.device_notify("No response from any device."))
     def _handle_qlong(self, x):
         for d in self.devs:
             if d is not None:
@@ -679,11 +697,11 @@ class RS485Devices(Devices):
                 print("Axis", axisnum, "discovered after initial query")
                 self.handle_initial_qlong(x)
                 return
-            self.ui.update_status(axisnum, dev)
+            self.gui_data.actions.append(lambda gui: gui.update_status(axisnum, dev))
         # Check for timely responses
         msg = ''
 
-        if self.ui.get_trace():
+        if self.trace:
             for d in self.devs:
                 if d is not None:
                     print("Device %s is at program counter 0x%04X, insn_len = 0x%04X\n" % (d.axisname, d.pc, self.insn_len))
@@ -701,7 +719,7 @@ class RS485Devices(Devices):
             # Some error.  Purge any unread data.
             self.f.timeout = 0.05
             self.f.read(256)
-            self.ui.device_notify(msg)
+            self.gui_data.actions.append(lambda gui: gui.device_notify(msg))
             self.n_devs = 0 # Force initial query
 
         self.test_rdy()
@@ -776,7 +794,6 @@ class RS485Devices(Devices):
                     # Else halt (error)
                     self.stepping = Devices.STOPPED
                     self.state = Devices.READY
-                    self.ui.update()
                 # Else poll using qlong...
                 # The 'running' test inhibits polling when ready for next instruction, however this
                 # prevents updating the status display (e.g. for I/O) so leave it out.
@@ -932,7 +949,7 @@ class RS485Devices(Devices):
                 if cmddly > 0. and n+2 < len(s):
                     time.sleep(cmddly)
                 cmddly = dly
-            if self.ui.get_trace():
+            if self.trace:
                 print("sent", len(s), "bytes:", ' '.join(["%02X" % c for c in s]))
             self.expect(expect, handler)
         except serial.SerialException as sx:
@@ -990,7 +1007,7 @@ class RS485Devices(Devices):
 
     def flash_continue(self):
         # Got 'PP' response.  Send next 256 bytes (64 locations), padding if necessary with GOTO 0.
-        self.ui.set_flash_progress(self.flash_addr, self.code.get_obj_len())
+        self.gui_data.actions.append(lambda gui: gui.set_flash_progress(self.flash_addr, self.code.get_obj_len()))
         if self.flash_addr >= self.code.get_obj_len():
             print("flash sending EOF")
             self.flash_state = self.FLASH_WAIT
@@ -1005,11 +1022,11 @@ class RS485Devices(Devices):
             self.flash_write_time = time.time()
     def flash_complete(self):
         print("flash complete")
-        self.ui.flash_done("Programming complete.")
+        self.gui_data.actions.append(lambda gui: gui.flash_done("Programming complete."))
         self.flash_state = self.FLASH_NONE
     def flash_fail(self):
         print("flash fail")
-        self.ui.flash_done("Programming error encountered.")
+        self.gui_data.actions.append(lambda gui: gui.flash_done("Programming error encountered."))
         self.flash_state = self.FLASH_NONE
 
     def input_sim_update(self, mask):
