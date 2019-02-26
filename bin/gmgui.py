@@ -992,23 +992,30 @@ class UI:
 		
 		self.geckomotion_serial_thread.start()
 
+		# start up idle function handler
+		GLib.timeout_add(50, self.update_device_data)
+
 
 	# background function which reads data from the devices and displays it in the GUI.
 	def update_device_data(self):
-		self.serial_control_lock.acquire()
+		
 
-		gui_data = self.devs.gui_data
+		with self.serial_control_lock:
 
-		# when the devices want to update the UI, they store lambdas in actions()
-		# now that we are in the UI thread, we can execute them here
-		for action in gui_data.actions:
-			action(self)
+			gui_data = self.devs.gui_data
 
-		gui_data.actions = []
+			#print("num actions: %d" % len(gui_data.actions))
 
-		self.serial_control_lock.release()
+			# when the devices want to update the UI, they store lambdas in actions()
+			# now that we are in the UI thread, we can execute them here
+			for action in gui_data.actions:
+				action(self)
 
-		self.update()
+			gui_data.actions = []
+
+			self.update()
+
+		return True
 
 	def internal_serial_thread(self):
 		""" Internal function which ticks the motor controller comms code.  Updates status, and sends the next command if applicable."""

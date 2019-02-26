@@ -993,7 +993,7 @@ class RS485Devices(Devices):
             return
         if x == 'PP':
             self.flash_continue()
-        elif x.startswith('E'):
+        elif x.startswith('E'.encode('ASCII')):
             self.flash_complete()
         else:  # Don't get this any more.  Error reported in status bit.
             self.flash_fail()
