@@ -373,6 +373,10 @@ class PersistentProject(Persistent):
 			return None
 		# Sibling folder to project base, called 'Lib'
 		return os.path.join(self.p.project_base, os.pardir, "Lib")
+
+	def _fulldir(self, d):
+		return os.path.join(__path__[0], d)
+
 	def get_stdlib_folder(self):
-		return _fulldir("Lib")
+		return self._fulldir("Lib")
 		

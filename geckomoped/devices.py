@@ -23,10 +23,8 @@ def win32_enumerate_serial_ports():
         existing on this computer.
     """
     path = 'HARDWARE\\DEVICEMAP\\SERIALCOMM'
-    try:
-        key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, path)
-    except WindowsError:
-        raise IterationError
+    key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, path)
+
     for i in itertools.count():
         try:
             val = winreg.EnumValue(key, i)
@@ -44,7 +42,7 @@ def win32_full_port_name(portname):
         return portname
     return '\\\\.\\' + portname
 
-class GUIData():
+class GUIData:
     def __init__(self):
         self.actions = []
 
@@ -104,12 +102,12 @@ class Device(object):
         translated to LED image pixbufs.
         Note: input states are inverted.
         """
-        return [self.axisnum, self.axisname, \
-                not(self.flags & self.FLG_IN1), not(self.flags & self.FLG_IN2), not(self.flags & self.FLG_IN3), \
-                self.flags & self.FLG_OUT1, self.flags & self.FLG_OUT2, self.flags & self.FLG_OUT3, \
-                self.flags & self.FLG_FPGA_ERR, self.flags & self.FLG_PIC_ERR, \
-                int(self.pos) + self.offset if self.pos_valid else 0, \
-                self.vel if self.vel_valid else 0, \
+        return [self.axisnum, self.axisname,
+                not(self.flags & self.FLG_IN1), not(self.flags & self.FLG_IN2), not(self.flags & self.FLG_IN3),
+                self.flags & self.FLG_OUT1, self.flags & self.FLG_OUT2, self.flags & self.FLG_OUT3,
+                self.flags & self.FLG_FPGA_ERR, self.flags & self.FLG_PIC_ERR,
+                int(self.pos) + self.offset if self.pos_valid else 0,
+                self.vel if self.vel_valid else 0,
                 self.flags & self.FLG_BUSY ]
     def executing_insns(self, insnlist):
         """Called when device is executing the provided instruction chain.
@@ -166,7 +164,7 @@ class Devices(object):
         # Stores the data from the device that will be passed to the GUI
         self.gui_data=GUIData()
 
-        self.trace = False;
+        self.trace = False
 
     def set_ui(self, ui):
         self.ui = ui
@@ -568,7 +566,7 @@ class RS485Devices(Devices):
         # fd is file descriptor, cond will be GObject.IO_* as appropriate.
         rtag = GObject.io_add_watch(fd, GObject.IO_IN, rdcb) if rdcb else None
         wtag = GObject.io_add_watch(fd, GObject.IO_OUT, wrcb) if wrcb else None
-        return (rtag, wtag)
+        return rtag, wtag
     def remove_fd(self, tags):
         for tag in tags:
             if tag is not None:
@@ -903,7 +901,7 @@ class RS485Devices(Devices):
         self._send_cmd(self.CMD_ESTOP, 0)
         for d in self.devs:
             if d is not None:
-                d.reset_offset();
+                d.reset_offset()
     def _send_qshort(self):
         self._send_cmd(self.CMD_QSHORT, 6+2*self.n_devs, self.handle_qshort)
         pass

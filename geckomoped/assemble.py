@@ -278,7 +278,7 @@ class Insn(AddressMark):
         Insns do not store their own address, so in the common case of returning 'addr+1', the
         int value is set to -1.
         """
-        return (False, 0)
+        return False, 0
     def is_pos_valid(self):
         """Return whether reported position (from query long) is valid during execution of
         this instruction.  True except for HOME and SPEED CONTROL.
@@ -333,8 +333,8 @@ class GotoInsn(ControlFlowInsn):
         return self.get_command_data() != 0 # i.e. not unconditional
     def is_instant(self):
         if self.get_command_data() == 0:
-            return (True, self.get_branch_field())
-        return (False, 0)
+            return True, self.get_branch_field()
+        return False, 0
 
 class ConditionalInsn(ControlFlowInsn):
     """Conditional instructions.
@@ -382,7 +382,7 @@ class CallInsn(ControlFlowInsn):
     def is_nextable(self):
         return True
     def is_instant(self):
-        return (True, self.get_branch_field())
+        return True, self.get_branch_field()
         
 class ReturnInsn(ControlFlowInsn):
     """Return instructions.
@@ -424,7 +424,7 @@ class AxisMaskInsn(Insn):
         super(AxisMaskInsn, self).__init__(line, tab)
         self.set_command_data(axes & 0x0F)
     def is_instant(self):
-        return (True, -1)
+        return True, -1
         
 class AnalogInputInsn(AxisMaskInsn):
     """Analogue input instructions
@@ -453,9 +453,9 @@ class ResPosInsn(AxisMaskInsn):
         self.set_upper_8(0x15)
         self.set_lower_16(0)
     def is_reset_offset(self):
-        return True;
+        return True
     def get_reset_offset(self):
-        return 0x3FFFFF;
+        return 0x3FFFFF
         
 class MovingAverageInsn(AxisMaskInsn):
     """Mavg instructions
@@ -479,7 +479,7 @@ class JogInsn(AxisMaskInsn):
     def is_fast(self):
         return False
     def is_instant(self):
-        return (False, 0)
+        return False, 0
         
         
 class MoveInsn(AxisInsn):
@@ -544,7 +544,7 @@ class ConfigureInsn(AxisInsn):
         self.set_command_data(i)
         self.set_lower_16(p<<8 | s)
     def is_instant(self):
-        return (True, -1)
+        return True, -1
 
 class ClockwiseLimitInsn(AxisInsn):
     """Clockwise Limit instructions.
@@ -557,7 +557,7 @@ class ClockwiseLimitInsn(AxisInsn):
         if n < 0 or n > 0xFFFFFF:
             raise CodeError(self, "Clockwise limit %d out of range" % n)
     def is_instant(self):
-        return (True, -1)
+        return True, -1
 
 class CompareInsn(AxisInsn):
     """Compare instructions.
@@ -570,7 +570,7 @@ class CompareInsn(AxisInsn):
         if n < 0 or n > 0xFFFFFF:
             raise CodeError(self, "Compare value %d out of range" % n)
     def is_instant(self):
-        return (True, -1)
+        return True, -1
 
 class AccelerationInsn(AxisInsn):
     """Accel instructions.
@@ -583,7 +583,7 @@ class AccelerationInsn(AxisInsn):
             raise CodeError(self, "Acceleration %f out of range" % float(n))
         self.set_lower_24_swapped(int(n)*256)
     def is_instant(self):
-        return (True, -1)
+        return True, -1
 
 class VelocityInsn(AxisInsn):
     """Velocity instructions.
@@ -596,7 +596,7 @@ class VelocityInsn(AxisInsn):
             raise CodeError(self, "Velocity %f out of range" % float(n))
         self.set_lower_24_swapped(int(n)*256)
     def is_instant(self):
-        return (True, -1)
+        return True, -1
 
 class PositionAdjustInsn(AxisInsn):
     """PositionAdjust instructions.
@@ -667,7 +667,7 @@ class ZeroOffsetInsn(AxisInsn):
         if n < 0 or n > 0x7FFFFF:
             raise CodeError(self, "Offset %d out of range" % n)
     def is_instant(self):
-        return (True, -1)
+        return True, -1
 
 class WaitInsn(Insn):
     """Wait instructions.
@@ -790,7 +790,7 @@ class Namespace(AddressMark):
             return self.get_namespace(ns.strip(), for_insn).get_label(rest.strip(), for_insn)
         # not qualified, look in self
         if qlabelname in self.labels:
-            return (self.labels[qlabelname], self)
+            return self.labels[qlabelname], self
         raise CodeError(for_insn, "Could not find label '%s'" % qlabelname)
     def get_namespace(self, nsname, for_insn):
         """Similar to get_label(), except look for (unqualified) namespace"""
@@ -1017,8 +1017,8 @@ class Code:
                 self.err = "Too many axes ("+str(len(bincode))+") in instruction at address "+str(addr)
             else:
                 self.err = "Instruction not terminated at address "+str(addr)
-            return (None, False, False, 0, None)
-        return (bincode, fast, instant, nxtaddr, insnlist)
+            return None, False, False, 0, None
+        return bincode, fast, instant, nxtaddr, insnlist
         
     def scan(self, tab, namespace):
         """Main token scanner and parser driver.  This is called for pass 1 which creates
@@ -1589,7 +1589,7 @@ org    binary      source line
                 print("    in: %s" % (f,), file=lf)
                 filename = f
             b = insn.get_binary()
-            print("%04X   %04X %04X%c  %s" % (a, b>>16, b & 0xFFFF, \
+            print("%04X   %04X %04X%c  %s" % (a, b>>16, b & 0xFFFF,
                     '+' if insn.get_chain() else ' ', '\n' if insn.get_chain() else insn.get_line_text()), end=' ', file=lf)
         return lf.getvalue()
         

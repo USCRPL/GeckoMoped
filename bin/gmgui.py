@@ -18,7 +18,7 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', '3.0')
 
 from gi.repository import GObject, Gtk, Gdk, GtkSource, Pango, GLib, GdkPixbuf
-import copy, pickle, os, os.path, sys, re, time
+import copy, pickle, os, os.path, sys, re, time, traceback
 from threading import Thread, Lock
 #from multiprocessing import Process
 #import subprocess
@@ -2095,7 +2095,7 @@ class UI:
 		text = self.search_text.get_text()
 		cs = not self.search_ignorecase.get_active()
 		word = self.search_word.get_active()
-		return (text, cs, word)
+		return text, cs, word
 	def get_replace(self):
 		if self.enable_replace.get_active():
 			return self.replace_text.get_text()
