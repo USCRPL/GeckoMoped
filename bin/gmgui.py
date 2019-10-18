@@ -38,14 +38,14 @@ class TabLabel(Gtk.Box):
 		self.set_spacing(4) # spacing: [icon|5px|label|5px|close]  
 		
 		# icon
-		normal_icon = Gtk.Image.new_from_stock(Gtk.STOCK_FILE, Gtk.IconSize.MENU)
-		top_icon = Gtk.Image.new_from_stock(Gtk.STOCK_ABOUT, Gtk.IconSize.MENU)
-		list_icon = Gtk.Image.new_from_stock(Gtk.STOCK_JUSTIFY_LEFT, Gtk.IconSize.MENU)
+		normal_icon = Gtk.Image.new_from_icon_name("text-x-generic", Gtk.IconSize.MENU)
+		top_icon = Gtk.Image.new_from_icon_name("help-about", Gtk.IconSize.MENU)
+		list_icon = Gtk.Image.new_from_icon_name("format-justify-left", Gtk.IconSize.MENU)
 		self.iconlist = [normal_icon, top_icon, list_icon]
 		self.pack_start(self.iconlist[0], False, False, 0)
 		
 		# label 
-		self.label = Gtk.Label(label_text)
+		self.label = Gtk.Label(label=label_text)
 		self.pack_start(self.label, True, True, 0)
 		
 		# close button
@@ -53,7 +53,7 @@ class TabLabel(Gtk.Box):
 		self.closebutton = button
 		button.set_relief(Gtk.ReliefStyle.NONE)
 		button.set_focus_on_click(False)
-		button.add(Gtk.Image.new_from_stock(Gtk.STOCK_CLOSE, Gtk.IconSize.MENU))
+		button.add(Gtk.Image.new_from_icon_name("window-close", Gtk.IconSize.MENU))
 		button.connect("clicked", self.button_clicked)
 		data =  ".button {\n" \
 				"border: none;\n" \
@@ -150,7 +150,7 @@ class Tab(object):
 		self.sourceview_gm.set_insert_spaces_instead_of_tabs(True)
 		self.sourceview_gm.set_wrap_mode(Gtk.WrapMode.WORD)
 		if self.mgr.font_desc:
-			self.sourceview_gm.modify_font(self.mgr.font_desc)
+			self.sourceview_gm.override_font(self.mgr.font_desc)
 		
 		self.sourceview_gm.set_mark_attributes('exec', self.mgr.exec_attrs, 1)
 		self.sourceview_gm.set_mark_attributes('err', self.mgr.err_attrs, 1)
@@ -241,8 +241,8 @@ class Tab(object):
 		#  YES = save the current file, 
 		#  NO = discard the current modifications, 
 		#  CANCEL = abort loading the new file
-		dialog = Gtk.MessageDialog(self.mainwindow, 0, Gtk.MessageType.WARNING,
-			Gtk.ButtonsType.NONE, "File modified")
+		dialog = Gtk.MessageDialog(parent=self.mainwindow, flags=0, message_type=Gtk.MessageType.WARNING,
+			buttons=Gtk.ButtonsType.NONE, text="File modified")
 		if filename is None:
 			filename = "untitled file"
 		dialog.format_secondary_text("Save " + filename + "?")
@@ -500,9 +500,10 @@ class TabManager(object):
 		self.err_attrs = GtkSource.MarkAttributes()
 		self.err_attrs.set_background(Gdk.RGBA(1.,0.9,0.4))
 		self.bkpt_attrs = GtkSource.MarkAttributes()
-		pixbuf = Gtk.IconTheme.get_default().load_icon('gtk-stop', 16, 0)
+		pixbuf = Gtk.IconTheme.get_default().load_icon('process-stop', 16, 0)
 		self.bkpt_attrs.set_pixbuf(pixbuf)
-		
+
+
 		self.add_filters(self.ui.filesave)
 		self.add_filters(self.ui.fileopen)
 	def get_tab_from_filename(self, filename):
@@ -896,18 +897,18 @@ class UI:
 		self.mom_state = {}
 		for axis in range(4):
 			# Axis header
-			isg.attach(Gtk.Label("XYZW"[axis]), axis*4+2, header_row, 3, 1)
+			isg.attach(Gtk.Label(label="XYZW"[axis]), axis*4+2, header_row, 3, 1)
 			for i in range(3):
 				col = axis*4 + i + 2
 				lab = str(i+1)
 				key = (axis, i)
 				# Toggle
-				tb = Gtk.ToggleButton(lab)
+				tb = Gtk.ToggleButton(label=lab)
 				isg.attach(tb, col, toggle_row, 1, 1)
 				tb.connect('toggled', self.input_sim_toggled)
 				tb.sim_input = key
 				# Momentary
-				b = Gtk.Button(lab)
+				b = Gtk.Button(label=lab)
 				isg.attach(b, col, momentary_row, 1, 1)
 				b.connect('pressed', self.input_sim_pressed)
 				b.connect('released', self.input_sim_released)
@@ -961,7 +962,7 @@ class UI:
 		self.log_auto_scroll = builder.get_object("log_auto_scroll")
 		self.log_scroller = builder.get_object("log_scrolledwindow")
 		self.log_view = builder.get_object("log_textview")
-		self.log_view.modify_font(Pango.FontDescription('Monospace 8'))
+		self.log_view.override_font(Pango.FontDescription('Monospace 8'))
 		self.log_mark = self.log_text.create_mark("end", self.log_text.get_end_iter(), False)
 		self.poll_rate = builder.get_object("poll_rate")    # adjustment
 		self.char_delay = builder.get_object("char_delay")    # adjustment
