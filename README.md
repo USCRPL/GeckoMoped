@@ -35,17 +35,17 @@ GeckoMoped is an enhanced version of GeckoDrive's GM215 [motor controller driver
 
 #### GUI Install
 
-To run the `gmgui` GUI you will need to install GTK+3 and the PyGObject library.
+To run the `gmgui` GUI you will need to install GTK+3, GtkSourceView, and the PyGObject library.
 The steps we used are below, more info can be found [here](https://pygobject.readthedocs.io/en/latest/getting_started.html)
 
 ##### Linux
 
-Ubuntu/Debian: `sudo apt install python3-gi python3-gi-cairo gir1.2-gtk-3.0`
+Ubuntu/Debian: `sudo apt install python3-gi python3-gi-cairo gir1.2-gtk-3.0 libgtksourceview-3.0`
 
 ##### OS X
 
 1. Install [Homebrew](https://brew.sh/)
-2. Install GTK+3 and PyGObject via Homebrew: `brew install pygobject3 gtk+3`
+2. Install GTK+3, GtkSourceView, and PyGObject via Homebrew: `brew install pygobject3 gtk+3 gtksourceview3 librsvg adwaita-icon-theme`
 3. Done!  You should now be able to run `gmgui` in the terminal.
 
 ##### Windows
@@ -55,7 +55,7 @@ Note: Instead of this guide, you can also use WSL and follow the Linux instructi
 
 1. First install [MSYS 2](http://www.msys2.org/), a Linux environment for Windows.  You should be able to use the i686 or the x86_64 version, but we tested with the x86_64 version.  Make sure to install to `C:\msys32` or `C:\msys64` respectively.
 2. Open a MSYS MinGW terminal using the start menu.  If you haven't already, initialize the package manager with `pacman -Syu`.
-3. Install MinGW python, GTK, and GObject: `pacman -S mingw-w64-x86_64-gtk3 mingw-w64-x86_64-python3 mingw-w64-x86_64-python3-gobject`.  Replace `x86_64` in that command with `i686` if you're using 32-bit MSYS.
+3. Install MinGW python, GTK, and GObject: `pacman -S mingw-w64-x86_64-gtk3 mingw-w64-x86_64-python3 mingw-w64-x86_64-python3-gobject mingw-w64-x86_64-gtksourceview3`.  Replace `x86_64` in that command with `i686` if you're using 32-bit MSYS.
 4. Finally, install GeckoMoped into the MinGW python.  Go to the GeckoMoped folder and run `python3 setup.py install`.  
 5. Done!  You should now be able to run `gmgui` using the MinGW terminal.
 
