@@ -39,21 +39,21 @@
   <object class="GtkAboutDialog" id="aboutdialog1">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
-    <property name="title" translatable="yes">About GeckoMotion</property>
+    <property name="title" translatable="yes">About GeckoMoped</property>
     <property name="modal">True</property>
     <property name="window_position">center-always</property>
     <property name="type_hint">dialog</property>
-    <property name="program_name">GeckoMotion</property>
-    <property name="version">1.0.0</property>
+    <property name="program_name">GeckoMoped</property>
+    <property name="version">1.0.32</property>
     <property name="copyright" translatable="yes">Copyright (C) 2014 Geckodrive Inc.
 All rights reserved.</property>
     <property name="comments" translatable="yes">Technical support:
-support@geckodrive.com
-Tel: +1 714 832 8874</property>
-    <property name="website">http://www.geckodrive.com</property>
-    <property name="website_label" translatable="yes">Geckodrive Inc.</property>
+GeckoDrive can be contacted at support@geckodrive.com, or by calling +1-(714)-832-8874.
+You can also report issues with GeckoMoped on the GitHub repository below.</property>
+    <property name="website">https://github.com/USCRPL/GeckoMoped</property>
+    <property name="website_label" translatable="yes">GeckoMoped on GitHub</property>
     <property name="license" translatable="yes">Proprietary.</property>
-    <property name="authors">Steve and the Geckodrive team.</property>
+    <property name="authors">Steve and the Geckodrive team.  Bugfixes and API by Jamie Smith.</property>
     <property name="artists">Steve.
 Oil on canvas, with digital enhancements.</property>
     <property name="license_type">custom</property>
