@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
 	name='GeckoMoped',
-	version='1.0.32dev',
+	version='1.0.32',
 	license='Public Domain',
 
 	# author info
@@ -13,7 +13,7 @@ setup(
 
 	# source info
 	packages=['geckomoped'],
-	scripts=['bin/gmgui.py'],
+	scripts=['bin/gmgui.py', 'bin/gmexec.py'],
 	url='https://github.com/USCRPL/GeckoMoped',
 	package_data={
 		'': ['geckomoped/gm.glade', 'geckomoped/images/*']
@@ -29,6 +29,9 @@ setup(
 	# dependencies
     install_requires=[
         "pyserial >= 3.0",
-        "pygobject >= 3.0.0",
     ],
+
+	extras_requires=[
+		"pygobject >= 3.0.0",
+	],
 )
