@@ -22,6 +22,7 @@ GeckoMoped is an enhanced version of GeckoDrive's GM215 [motor controller driver
 
 - The driver may catch and blackhole KeyboardInterrupts under certain circumstances, causing issues stopping programs with Ctrl-C.  Ctrl-Z (Linux/Mac) and Ctrl-Break (Win) always work though.
 - Under certain rare circumstances, errors in serial communication may cause execution of a program to freeze.  I have a theory about what is causing this and how to fix it but I need to collect more logs before I can be sure.
+- The input and position view window may not show correct data in certain cases.  Trying to figure out what is causing this to happen.
 
 ### Installation
 
