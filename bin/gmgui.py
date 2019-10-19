@@ -1899,8 +1899,8 @@ class UI:
 		self.serial_control_lock.release()
 
 		if not self._connected:
-			dialog = Gtk.MessageDialog(self.mainwindow, 0, Gtk.MessageType.ERROR,
-				Gtk.ButtonsType.NONE, "Serial port selection error")
+			dialog = Gtk.MessageDialog(parent=self.mainwindow, flags=0, message_type=Gtk.MessageType.ERROR,
+				buttons=Gtk.ButtonsType.NONE, text="Serial port selection error")
 			dialog.format_secondary_text("The selected serial device node could not be opened:\n%s." % \
 						(self.devs.conn_error,))
 			dialog.add_buttons("CANCEL", Gtk.ResponseType.CANCEL,)

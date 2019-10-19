@@ -157,7 +157,7 @@ class Devices(object):
         self.exec_mark = None
         self.devs = [None]*4  # Array of Device() objects (indexed by axisnum 0..3)
         self._n_devs = 0
-        self.insim_state = 0
+        self.insim_state = 0 #note: "insim" = "input simulation"
         self.insn_len = 1
         self.send_next_command = False
         
@@ -280,7 +280,7 @@ class Devices(object):
             return
         err = None
         if not self.hit_breakpoint() and \
-                    (self.stepping == Devices.RUN_UNTIL_BREAK or \
+                    (self.stepping == Devices.RUN_UNTIL_BREAK or
                      self.stepping == Devices.RUN_UNTIL_BREAK_OR_ADDRMATCH and self.addrmatch != self.addr):
             self.send_next_command = True
             return
@@ -462,10 +462,15 @@ class Devices(object):
         self.addrmatch = self.addr + 1
         self.run_until_break(Devices.RUN_UNTIL_BREAK_OR_ADDRMATCH)
     def run_until_break(self, typ=None):
+
+        # SIMULATION version of run_until_break -- executes all instructions instantly
+
         if self.can_step():
             self.stepping = typ or Devices.RUN_UNTIL_BREAK
-            while self.stepping == Devices.RUN_UNTIL_BREAK and self.send_command() is None:
+            while self.stepping == Devices.RUN_UNTIL_BREAK and self.send_command(False) is None:
                 self._dummy_done()
+            self.stepping = Devices.STOPPED
+
     def stop(self):
         if self.is_connected() and not self.is_ready():
             self.stepping = Devices.STOPPED
@@ -514,6 +519,16 @@ class Devices(object):
         pass
     def input_sim_update(self, mask):
         pass
+
+    # extra functions added by GeckoMoped for full parity with RS485Devices:
+    def idle_func(self):
+        pass
+
+    def _send_qlong(self, initial=False):
+        pass
+
+    def get_serport_obj(self):
+        return None
 
 class RS485Devices(Devices):
     """Represents real device chain on RS485 port.
@@ -1030,3 +1045,6 @@ class RS485Devices(Devices):
     def input_sim_update(self, mask):
         self.new_insim_state = mask
         # Actual device update in idle func (since we can get a flurry of these)
+
+    def get_serport_obj(self):
+        return self.f

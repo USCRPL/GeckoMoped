@@ -1,0 +1,5 @@
+x configure: 4 amps, idle at 50% after 1 seconds
+y configure: 6 amps, idle at 50% after 5 seconds
+
+x velocity 300
+home x
