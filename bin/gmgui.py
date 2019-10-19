@@ -20,6 +20,7 @@ gi.require_version('GtkSource', '3.0')
 from gi.repository import GObject, Gtk, Gdk, GtkSource, Pango, GLib, GdkPixbuf
 import copy, pickle, os, os.path, sys, re, time, traceback
 from threading import Thread, Lock
+import argparse
 #from multiprocessing import Process
 #import subprocess
 from geckomoped import _gladedir, _app_fullname, _version, _imagedir, _icondir, __path__
@@ -2440,9 +2441,18 @@ class PersistentProject(Persistent):
 
 
 if __name__ == "__main__":
-	
+
+	# handle --simulate argument
+	parser = argparse.ArgumentParser()
+	parser.add_argument("-s", "--simulate",
+						help="Use simulated dummy motor controllers.  These will always connect and will run code instantly.",
+						action="store_true", required=False)
+
+	args = parser.parse_args()
+	simulate = args.simulate
+
 	# Create user interface
-	if len(sys.argv) > 1 and sys.argv[1] == '--simulate':
+	if simulate:
 		# use fake devices
 		ui = UI(Persistent(), Devices())
 	else:
