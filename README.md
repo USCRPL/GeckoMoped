@@ -55,7 +55,7 @@ Note: Instead of this guide, you can also use WSL and follow the Linux instructi
 
 1. First install [MSYS 2](http://www.msys2.org/), a Linux environment for Windows.  You should be able to use the i686 or the x86_64 version, but we tested with the x86_64 version.  Make sure to install to `C:\msys32` or `C:\msys64` respectively.
 2. Open a MSYS MinGW terminal using the start menu.  If you haven't already, initialize the package manager with `pacman -Syu`.
-3. Install MinGW python, GTK, and GObject: `pacman -S mingw-w64-x86_64-gtk3 mingw-w64-x86_64-python3 mingw-w64-x86_64-python3-gobject mingw-w64-x86_64-gtksourceview3`.  Replace `x86_64` in that command with `i686` if you're using 32-bit MSYS.
+3. Install MinGW python, GTK, and GObject: `pacman -S mingw-w64-x86_64-gtk3 mingw-w64-x86_64-python3 mingw-w64-x86_64-python3-gobject mingw-w64-x86_64-python3-setuptools mingw-w64-x86_64-gtksourceview3`.  Replace `x86_64` in that command with `i686` if you're using 32-bit MSYS.
 4. Finally, install GeckoMoped into the MinGW python.  Go to the GeckoMoped folder and run `python3 setup.py install`.  
 5. Done!  You should now be able to run `gmgui` using the MinGW terminal.
 
